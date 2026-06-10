@@ -84,6 +84,72 @@ export interface Database {
         };
         Relationships: [];
       };
+      job_runs: {
+        Row: {
+          id: string;
+          user_id: string;
+          company: string | null;
+          mode: 'oneoff' | 'batch';
+          toggles: Json;
+          status:
+            | 'running'
+            | 'awaiting_approval'
+            | 'writing'
+            | 'done'
+            | 'skipped'
+            | 'error';
+          current_step: string | null;
+          iteration: number;
+          resume_doc_url: string | null;
+          cover_doc_url: string | null;
+          error_message: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string;
+          company?: string | null;
+          mode?: 'oneoff' | 'batch';
+          toggles?: Json;
+          status?:
+            | 'running'
+            | 'awaiting_approval'
+            | 'writing'
+            | 'done'
+            | 'skipped'
+            | 'error';
+          current_step?: string | null;
+          iteration?: number;
+          resume_doc_url?: string | null;
+          cover_doc_url?: string | null;
+          error_message?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          company?: string | null;
+          mode?: 'oneoff' | 'batch';
+          toggles?: Json;
+          status?:
+            | 'running'
+            | 'awaiting_approval'
+            | 'writing'
+            | 'done'
+            | 'skipped'
+            | 'error';
+          current_step?: string | null;
+          iteration?: number;
+          resume_doc_url?: string | null;
+          cover_doc_url?: string | null;
+          error_message?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -100,6 +166,10 @@ export type ChatSession =
   Database['public']['Tables']['n8n_chat_sessions']['Row'];
 export type N8nChatHistory =
   Database['public']['Tables']['n8n_chat_histories']['Row'];
+
+export type JobRun = Database['public']['Tables']['job_runs']['Row'];
+export type JobRunInsert = Database['public']['Tables']['job_runs']['Insert'];
+export type JobRunUpdate = Database['public']['Tables']['job_runs']['Update'];
 
 /** A single LangChain message as stored in n8n_chat_histories.message. */
 export interface N8nStoredMessage {
