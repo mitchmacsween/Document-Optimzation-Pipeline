@@ -19,11 +19,12 @@ CREATE TABLE job_runs (
   resume_doc_url TEXT,
   cover_doc_url  TEXT,
   error_message  TEXT,
-  created_at     TIMESTAMPTZ DEFAULT now(),
-  updated_at     TIMESTAMPTZ DEFAULT now()
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX job_runs_user_id_idx ON job_runs (user_id);
+-- Composite index serves the timeline query: a user's runs newest-first.
+CREATE INDEX job_runs_user_created_idx ON job_runs (user_id, created_at DESC);
 
 ALTER TABLE job_runs ENABLE ROW LEVEL SECURITY;
 
@@ -33,6 +34,7 @@ CREATE POLICY "Users can insert their own job runs" ON job_runs
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can update their own job runs" ON job_runs
   FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+-- No DELETE policy: job runs are an immutable activity log in v1 (the app never deletes them).
 
 -- Realtime: let the app subscribe to job_runs changes.
 ALTER PUBLICATION supabase_realtime ADD TABLE job_runs;
