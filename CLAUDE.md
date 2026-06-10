@@ -84,6 +84,7 @@ app/
 ├── components/
 │   ├── applications/
 │   │   ├── JobRunItem.tsx
+│   │   ├── JobSubmitForm.tsx
 │   │   └── ProgressTimeline.tsx
 │   ├── chat/
 │   │   ├── ChatContextPanel.tsx  # Right-hand panel with two views of the user's Zep memory:
@@ -210,6 +211,7 @@ types/
 | `app/components/PageShell.tsx` | The standard page frame for every top-level content page (Design, Charts, Chat, | `PageShell` |
 | `app/components/ThemeToggle.tsx` |  | `ThemeToggle` |
 | `app/components/applications/JobRunItem.tsx` |  | `JobRunItem` |
+| `app/components/applications/JobSubmitForm.tsx` |  | `JobSubmitForm` |
 | `app/components/applications/ProgressTimeline.tsx` |  | `ProgressTimeline` |
 | `app/components/chat/ChatContextPanel.tsx` | Right-hand panel with two views of the user's Zep memory: | `ChatContextPanel` |
 | `app/components/chat/ChatMessages.tsx` |  | `ChatMessages` |
