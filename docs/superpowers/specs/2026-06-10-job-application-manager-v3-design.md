@@ -31,7 +31,7 @@ The Next.js template (this repo) already ships the relevant infrastructure: `@su
 
 ## 2. Goals
 
-1. **Human approval loop (#1):** after Strategy runs, the pipeline pauses and presents the strategy in the front-end. The user can **Approve as-is**, **Redirect with free-text feedback** (loops back to Strategy and re-presents), or **Pick the cover-letter hook** among the candidates Strategy already generates. Only after approval do the Resume/Cover-Letter pipelines run.
+1. **Human approval loop (#1):** after Strategy runs, the pipeline pauses and presents the strategy in the front-end. The user can **Approve as-is**, **Redirect with free-text feedback** (loops back to Strategy and re-presents), **Pick the cover-letter hook** among the candidates Strategy already generates, or **Skip the job** (abandon it and, in batch mode, move to the next queued job). Only after approval do the Resume/Cover-Letter pipelines run.
 2. **GUI front-end (#3) + structured inputs (#4):** a Next.js "hybrid workspace" replaces the chat-trigger+regex+sheet entry. Left panel: input mode (batch / one-off) + Research/Resume/Cover-Letter toggles. Right panel: live progress timeline + the approval card.
 3. **Efficient agent communication (#5):** convert the manager from an LLM-tool orchestrator into a **deterministic pipeline** that passes typed, minimal payloads between steps.
 4. **RAG (#2):** Strategy keeps using the existing `documents` RAG. (Already built; no change required. Expanding the ingested corpus is optional follow-up.)
@@ -40,7 +40,6 @@ The Next.js template (this repo) already ships the relevant infrastructure: `@su
 ## 3. Non-goals / deferred
 
 - Inline editing of the strategy text before approval (approval control #4 from brainstorming) — deferred.
-- A general "skip/reject job" control — a minimal version may be added for batch UX, but it is not a v1 requirement.
 - Re-architecting the sub-agents' internal logic (editor/judge loops, guardrails) — they stay as-is; only how the manager invokes them changes.
 - Locking down `documents` RLS — out of scope (only n8n service-role touches it in this design).
 
@@ -95,8 +94,8 @@ SHARED SERVICES
 
 - After Strategy, an n8n **Wait** node configured to **resume on webhook call** pauses the execution and yields a resume URL.
 - Before pausing, the pipeline **upserts a `pending_approvals` row** (service-role connection) containing the strategy JSON, candidate hooks, recommended index, `job_run_id`, `user_id`, `session_id`, the **resume URL**, and `status = pending`.
-- The front-end reads the row via Realtime, renders the approval card, and on action posts `{ decision: "approve"|"redirect", chosen_hook_index?, feedback? }` to a **server-side Next.js route**, which forwards to the n8n resume URL (keeping any secret server-side).
-- On resume, the pipeline branches: `approve` → run enabled writers; `redirect` → loop to Strategy with `user_redirects = feedback`.
+- The front-end reads the row via Realtime, renders the approval card, and on action posts `{ decision: "approve"|"redirect"|"skip", chosen_hook_index?, feedback? }` to a **server-side Next.js route**, which forwards to the n8n resume URL (keeping any secret server-side).
+- On resume, the pipeline branches: `approve` → run enabled writers; `redirect` → loop to Strategy with `user_redirects = feedback`; `skip` → mark the row/`job_run` `skipped`, run no writers, and (batch mode) advance to the next queued job.
 
 ### 5.3 Front-end (Next.js)
 
@@ -104,12 +103,12 @@ SHARED SERVICES
 - Reuses shadcn primitives from `components/ui/` and the template's Supabase browser client + Realtime patterns.
 - **Server routes:** `app/api/applications/route.ts` (submit → n8n webhook, attaches `API_KEY`); `app/api/applications/approve/route.ts` (decision → n8n resume URL). Both use the server Supabase client so requests run as the signed-in user; inputs validated with **Zod**.
 - **Left panel:** input-mode toggle, JD textarea (one-off), the three checkboxes, submit button.
-- **Right panel:** progress timeline (Realtime on `job_runs`) and the approval card (Realtime on `pending_approvals`) with Approve / Redirect (free-text) / hook radio.
+- **Right panel:** progress timeline (Realtime on `job_runs`) and the approval card (Realtime on `pending_approvals`) with Approve / Redirect (free-text) / hook radio / Skip job.
 
 ### 5.4 Supabase data model
 
 - **`pending_approvals`** (exists, empty): `id`, `user_id`, `session_id`, `job_run_id`, `status` (`pending`/`approved`/`redirected`/`skipped`), `strategy_json` (jsonb), `candidate_hooks` (jsonb), `recommended_hook_index` (int), `chosen_hook_index` (int, null), `feedback` (text, null), `resume_url` (text), `iteration` (int), `created_at`, `updated_at`. **Per-user RLS** (select/update own rows); n8n writes via service role.
-- **`job_runs`** (new): `id`, `user_id`, `company` (text, null until known), `mode`, `toggles` (jsonb), `status` (`running`/`awaiting_approval`/`writing`/`done`/`error`), `current_step` (text), `iteration` (int), `resume_doc_url` (text, null), `cover_doc_url` (text, null), `error_message` (text, null), `created_at`, `updated_at`. **Per-user RLS**; added to the `supabase_realtime` publication.
+- **`job_runs`** (new): `id`, `user_id`, `company` (text, null until known), `mode`, `toggles` (jsonb), `status` (`running`/`awaiting_approval`/`writing`/`done`/`skipped`/`error`), `current_step` (text), `iteration` (int), `resume_doc_url` (text, null), `cover_doc_url` (text, null), `error_message` (text, null), `created_at`, `updated_at`. **Per-user RLS**; added to the `supabase_realtime` publication.
 - Both tables added as a version-controlled migration under `supabase/migrations/`, applied via the Supabase MCP (`apply_migration`); `types/supabase.ts` regenerated afterward.
 - `documents` (RAG) unchanged. It currently has **RLS disabled** — acceptable here because only n8n (service role) reads it; if the front-end ever reads it directly, policies must be added first.
 
@@ -138,7 +137,7 @@ SHARED SERVICES
 - **Long-running executions:** the Wait node keeps the execution "running" while awaiting approval. The workflow must stay **Active**; verify n8n's execution-timeout settings tolerate realistic approval delays.
 - **Resume-URL delivery & security:** the n8n resume URL must travel n8n → `pending_approvals` → front-end and be callable only by the owning user. Front-end calls it through a server route; confirm whether the resume webhook needs its own auth and that the URL isn't exposed to other users (RLS on `pending_approvals` scopes the read).
 - **Migrating off the LLM orchestrator:** the new pipeline is deterministic, so the toggle flags come from the UI, not the model. Confirm no orchestration nuance (e.g. conditional hook heuristics) is lost; port needed heuristics into pipeline logic or keep them inside Strategy.
-- **v2 manager** (`Td3gVZWiDgRPLV4T`) is not MCP-accessible; this design builds from the active v1 manager. Decide whether v3 is a new workflow or an in-place rewrite (recommend: new workflow, leave v1 intact until v3 is verified).
+- **New workflow (decided):** v3 is built as a **new** n8n workflow, leaving the active v1 manager (`33qUUlaqM9Yq5OX6`) untouched until v3 is verified end-to-end, then cut over. The v2 manager (`Td3gVZWiDgRPLV4T`) is not MCP-accessible and is not used as the base.
 
 ## 9. Success criteria
 
