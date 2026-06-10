@@ -152,6 +152,7 @@ components/
     └── select.tsx  # A lightweight select built on the native `<select>` element.
 lib/
 ├── applications/
+│   ├── n8n-client.ts  # POST a one-off job to the Job Application Manager v3 n8n webhook. Server-only
 │   └── schema.ts  # The three actions a job submission can request. At least one must be true.
 ├── supabase/
 │   ├── client.ts  # Supabase client for use inside Client Components (`'use client'`).
@@ -252,6 +253,7 @@ types/
 | `lib/n8n-stream.ts` | Normalize an n8n AI Agent streaming response into a plain text token stream. | `N8N_RUN_SEPARATOR`, `createN8nTextStream` |
 | `lib/report-client-error.ts` | The error shape an App Router error boundary receives: a standard `Error` | `reportClientError` |
 | `lib/utils.ts` | Merge Tailwind class names, resolving conflicts (later classes win). | `cn`, `generateId`, `studioCard`, `studioCardHover` |
+| `lib/applications/n8n-client.ts` | POST a one-off job to the Job Application Manager v3 n8n webhook. Server-only | `DispatchJobParams`, `dispatchJobToN8n` |
 | `lib/applications/schema.ts` | The three actions a job submission can request. At least one must be true. | `togglesSchema`, `submitJobSchema`, `Toggles`, `SubmitJobInput` |
 | `lib/supabase/client.ts` | Supabase client for use inside Client Components (`'use client'`). | `createClient` |
 | `lib/supabase/middleware.ts` | Refreshes the Supabase auth session on every request and gates access. | `updateSession` |
