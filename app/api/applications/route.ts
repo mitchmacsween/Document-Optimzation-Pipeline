@@ -57,10 +57,16 @@ export async function POST(request: Request): Promise<NextResponse> {
         dispatchError instanceof Error
           ? dispatchError.message
           : 'dispatch failed';
-      await supabase
+      const { error: updateError } = await supabase
         .from('job_runs')
         .update({ status: 'error', error_message: message })
         .eq('id', jobRun.id);
+      if (updateError) {
+        logger.warn('Failed to mark job_run as error after dispatch failure', {
+          jobRunId: jobRun.id,
+          updateError: updateError.message,
+        });
+      }
       logger.error('n8n dispatch failed', { error: message });
       return NextResponse.json(
         { error: 'Failed to dispatch job', details: message },

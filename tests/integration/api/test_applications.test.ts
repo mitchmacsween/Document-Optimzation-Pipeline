@@ -5,6 +5,7 @@
 import { POST } from '@/app/api/applications/route';
 import { createClient } from '@/lib/supabase/server';
 import { dispatchJobToN8n } from '@/lib/applications/n8n-client';
+import { logger } from '@/lib/logger';
 
 jest.mock('@/lib/logger', () => ({
   logger: {
@@ -109,5 +110,23 @@ describe('POST /api/applications', () => {
       expect.objectContaining({ status: 'error' })
     );
     expect(res.status).toBe(502);
+    expect(logger.error).toHaveBeenCalledWith(
+      'n8n dispatch failed',
+      expect.objectContaining({ error: 'boom' })
+    );
+  });
+
+  it('returns 500 when the insert fails', async () => {
+    const mockSingle = jest
+      .fn()
+      .mockResolvedValue({ data: null, error: { message: 'DB error' } });
+    const mockSelect = jest.fn().mockReturnValue({ single: mockSingle });
+    const mockInsert = jest.fn().mockReturnValue({ select: mockSelect });
+    mockFrom.mockReturnValue({ insert: mockInsert });
+
+    const res = await POST(makeRequest(validBody));
+
+    expect(res.status).toBe(500);
+    expect(dispatchJobToN8n).not.toHaveBeenCalled();
   });
 });
