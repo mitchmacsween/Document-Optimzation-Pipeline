@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: '/tasks', label: 'Tasks' },
   { href: '/charts', label: 'Charts' },
   { href: '/chat', label: 'Chat' },
+  { href: '/applications', label: 'Applications' },
   { href: '/test-dashboard', label: 'Tests' },
   { href: '/design', label: 'Design' },
   { href: '/memory', label: 'Memory' },

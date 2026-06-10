@@ -70,6 +70,8 @@ app/
 │   │   └── route.ts
 │   └── test-runner/
 │       └── route.ts
+├── applications/
+│   └── page.tsx
 ├── auth/
 │   ├── callback/
 │   │   └── route.ts  # OAuth / PKCE callback. The provider redirects here with a `?code=...` which
@@ -199,6 +201,7 @@ types/
 | `app/api/tasks/route.ts` |  | `GET`, `POST` |
 | `app/api/tasks/[id]/route.ts` |  | `PATCH`, `DELETE` |
 | `app/api/test-runner/route.ts` |  | `POST` |
+| `app/applications/page.tsx` |  | `ApplicationsPage` |
 | `app/auth/callback/route.ts` | OAuth / PKCE callback. The provider redirects here with a `?code=...` which | `GET` |
 | `app/auth/confirm/route.ts` | Email confirmation / magic-link handler. Supabase emails a link containing a | `GET` |
 | `app/auth/signout/route.ts` | Signs the user out and sends them to /login. Called by the Sign Out form in | `POST` |
