@@ -53,6 +53,8 @@ denies `rm -rf /`, force-push, hard reset, `npm publish`, and pipe-to-shell.
 <!-- AUTO:tree -->
 app/
 ├── api/
+│   ├── applications/
+│   │   └── route.ts
 │   ├── chat/
 │   │   └── route.ts  # Proxy the request to the n8n workflow and stream its reply back.
 │   ├── client-errors/
@@ -185,6 +187,7 @@ types/
 | `app/global-error.tsx` | Global error boundary. Catches errors thrown in the root layout itself, where | `GlobalError` |
 | `app/layout.tsx` | Applies the saved theme before paint (see public/theme-init.js) to | `metadata`, `RootLayout` |
 | `app/page.tsx` |  | `HomePage` |
+| `app/api/applications/route.ts` |  | `POST` |
 | `app/api/chat/route.ts` | Proxy the request to the n8n workflow and stream its reply back. | `maxDuration`, `POST` |
 | `app/api/client-errors/route.ts` | Receives client-side crash reports and records them server-side via the | `POST` |
 | `app/api/memory/search/route.ts` | POST /api/memory/search — run an auto graph search over the signed-in user's | `POST` |
