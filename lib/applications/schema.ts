@@ -15,12 +15,7 @@ export const submitJobSchema = z
       .trim()
       .min(20, 'Job description must be at least 20 characters'),
     toggles: togglesSchema,
-    sessionId: z
-      .string()
-      .regex(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
-        'Invalid UUID'
-      ),
+    sessionId: z.string().uuid(),
   })
   .refine((d) => d.toggles.research || d.toggles.resume || d.toggles.cover, {
     message: 'Select at least one action',

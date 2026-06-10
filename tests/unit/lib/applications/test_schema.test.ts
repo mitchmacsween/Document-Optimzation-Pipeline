@@ -1,6 +1,6 @@
 import { submitJobSchema } from '@/lib/applications/schema';
 
-const validSession = '11111111-1111-1111-1111-111111111111';
+const validSession = '11111111-1111-4111-8111-111111111111';
 
 describe('submitJobSchema', () => {
   it('accepts a valid one-off submission', () => {
