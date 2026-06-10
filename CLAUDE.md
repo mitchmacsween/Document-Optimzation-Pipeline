@@ -82,6 +82,8 @@ app/
 ├── chat/
 │   └── page.tsx
 ├── components/
+│   ├── applications/
+│   │   └── JobRunItem.tsx
 │   ├── chat/
 │   │   ├── ChatContextPanel.tsx  # Right-hand panel with two views of the user's Zep memory:
 │   │   ├── ChatMessages.tsx
@@ -206,6 +208,7 @@ types/
 | `app/components/PageHero.tsx` | The shared page header used at the top of every top-level page (Design, Charts, | `PageHero` |
 | `app/components/PageShell.tsx` | The standard page frame for every top-level content page (Design, Charts, Chat, | `PageShell` |
 | `app/components/ThemeToggle.tsx` |  | `ThemeToggle` |
+| `app/components/applications/JobRunItem.tsx` |  | `JobRunItem` |
 | `app/components/chat/ChatContextPanel.tsx` | Right-hand panel with two views of the user's Zep memory: | `ChatContextPanel` |
 | `app/components/chat/ChatMessages.tsx` |  | `ChatMessages` |
 | `app/components/chat/ChatSessionSidebar.tsx` |  | `ChatSessionSidebar` |
