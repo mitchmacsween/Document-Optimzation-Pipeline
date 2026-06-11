@@ -48,6 +48,15 @@ describe('ApplicationsPage', () => {
     mockSendMessage.mockReset();
   });
 
+  it('does not show the approve button when there are no messages', () => {
+    render(<ApplicationsPage />);
+
+    // messages: [] → no assistant message → showApproval is false
+    expect(
+      screen.queryByRole('button', { name: /approve/i })
+    ).not.toBeInTheDocument();
+  });
+
   it('renders a heading that matches /job applications/i', () => {
     render(<ApplicationsPage />);
 

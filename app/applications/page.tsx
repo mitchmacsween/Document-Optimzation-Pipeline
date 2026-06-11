@@ -13,6 +13,7 @@ import { PageHero } from '../components/PageHero';
 import { PageShell } from '../components/PageShell';
 import { ChatMessages } from '../components/chat/ChatMessages';
 import { ActionToggles } from '../components/applications/ActionToggles';
+import { ApprovalActions } from '../components/applications/ApprovalActions';
 
 export default function ApplicationsPage() {
   const [sessionId] = useState(() => generateId());
@@ -35,6 +36,7 @@ export default function ApplicationsPage() {
   const { messages, sendMessage, status, error } = useChat({ transport });
 
   const isBusy = status === 'submitted' || status === 'streaming';
+  const showApproval = !isBusy && messages.some((m) => m.role === 'assistant');
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -65,6 +67,18 @@ export default function ApplicationsPage() {
         </CardContent>
 
         <div className="border-t p-4 space-y-3">
+          {showApproval && (
+            <ApprovalActions
+              onApprove={() =>
+                sendMessage({
+                  text: 'Approved — please generate the documents now.',
+                })
+              }
+              onRequestChanges={() => setInput('Please revise the strategy: ')}
+              disabled={isBusy}
+            />
+          )}
+
           <ActionToggles toggles={toggles} onChange={setToggles} />
 
           <form onSubmit={handleSubmit} className="flex gap-2">
