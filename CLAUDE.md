@@ -53,8 +53,6 @@ denies `rm -rf /`, force-push, hard reset, `npm publish`, and pipe-to-shell.
 <!-- AUTO:tree -->
 app/
 ├── api/
-│   ├── applications/
-│   │   └── route.ts
 │   ├── chat/
 │   │   └── route.ts  # Proxy the request to the n8n workflow and stream its reply back.
 │   ├── client-errors/
@@ -70,8 +68,6 @@ app/
 │   │   └── route.ts
 │   └── test-runner/
 │       └── route.ts
-├── applications/
-│   └── page.tsx
 ├── auth/
 │   ├── callback/
 │   │   └── route.ts  # OAuth / PKCE callback. The provider redirects here with a `?code=...` which
@@ -84,10 +80,6 @@ app/
 ├── chat/
 │   └── page.tsx
 ├── components/
-│   ├── applications/
-│   │   ├── JobRunItem.tsx
-│   │   ├── JobSubmitForm.tsx
-│   │   └── ProgressTimeline.tsx
 │   ├── chat/
 │   │   ├── ChatContextPanel.tsx  # Right-hand panel with two views of the user's Zep memory:
 │   │   ├── ChatMessages.tsx
@@ -160,7 +152,6 @@ components/
     └── select.tsx  # A lightweight select built on the native `<select>` element.
 lib/
 ├── applications/
-│   ├── n8n-client.ts  # POST a one-off job to the Job Application Manager v3 n8n webhook. Server-only
 │   └── schema.ts  # The three actions a job submission can request. At least one must be true.
 ├── supabase/
 │   ├── client.ts  # Supabase client for use inside Client Components (`'use client'`).
@@ -193,7 +184,6 @@ types/
 | `app/global-error.tsx` | Global error boundary. Catches errors thrown in the root layout itself, where | `GlobalError` |
 | `app/layout.tsx` | Applies the saved theme before paint (see public/theme-init.js) to | `metadata`, `RootLayout` |
 | `app/page.tsx` |  | `HomePage` |
-| `app/api/applications/route.ts` |  | `POST` |
 | `app/api/chat/route.ts` | Proxy the request to the n8n workflow and stream its reply back. | `maxDuration`, `POST` |
 | `app/api/client-errors/route.ts` | Receives client-side crash reports and records them server-side via the | `POST` |
 | `app/api/memory/search/route.ts` | POST /api/memory/search — run an auto graph search over the signed-in user's | `POST` |
@@ -201,7 +191,6 @@ types/
 | `app/api/tasks/route.ts` |  | `GET`, `POST` |
 | `app/api/tasks/[id]/route.ts` |  | `PATCH`, `DELETE` |
 | `app/api/test-runner/route.ts` |  | `POST` |
-| `app/applications/page.tsx` |  | `ApplicationsPage` |
 | `app/auth/callback/route.ts` | OAuth / PKCE callback. The provider redirects here with a `?code=...` which | `GET` |
 | `app/auth/confirm/route.ts` | Email confirmation / magic-link handler. Supabase emails a link containing a | `GET` |
 | `app/auth/signout/route.ts` | Signs the user out and sends them to /login. Called by the Sign Out form in | `POST` |
@@ -213,9 +202,6 @@ types/
 | `app/components/PageHero.tsx` | The shared page header used at the top of every top-level page (Design, Charts, | `PageHero` |
 | `app/components/PageShell.tsx` | The standard page frame for every top-level content page (Design, Charts, Chat, | `PageShell` |
 | `app/components/ThemeToggle.tsx` |  | `ThemeToggle` |
-| `app/components/applications/JobRunItem.tsx` |  | `JobRunItem` |
-| `app/components/applications/JobSubmitForm.tsx` |  | `JobSubmitForm` |
-| `app/components/applications/ProgressTimeline.tsx` |  | `ProgressTimeline` |
 | `app/components/chat/ChatContextPanel.tsx` | Right-hand panel with two views of the user's Zep memory: | `ChatContextPanel` |
 | `app/components/chat/ChatMessages.tsx` |  | `ChatMessages` |
 | `app/components/chat/ChatSessionSidebar.tsx` |  | `ChatSessionSidebar` |
@@ -266,7 +252,6 @@ types/
 | `lib/n8n-stream.ts` | Normalize an n8n AI Agent streaming response into a plain text token stream. | `N8N_RUN_SEPARATOR`, `createN8nTextStream` |
 | `lib/report-client-error.ts` | The error shape an App Router error boundary receives: a standard `Error` | `reportClientError` |
 | `lib/utils.ts` | Merge Tailwind class names, resolving conflicts (later classes win). | `cn`, `generateId`, `studioCard`, `studioCardHover` |
-| `lib/applications/n8n-client.ts` | POST a one-off job to the Job Application Manager v3 n8n webhook. Server-only | `DispatchJobParams`, `dispatchJobToN8n` |
 | `lib/applications/schema.ts` | The three actions a job submission can request. At least one must be true. | `togglesSchema`, `submitJobSchema`, `Toggles`, `SubmitJobInput` |
 | `lib/supabase/client.ts` | Supabase client for use inside Client Components (`'use client'`). | `createClient` |
 | `lib/supabase/middleware.ts` | Refreshes the Supabase auth session on every request and gates access. | `updateSession` |
