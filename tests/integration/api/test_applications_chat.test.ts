@@ -75,4 +75,40 @@ describe('POST /api/applications/chat', () => {
     });
     expect(res.status).toBe(200);
   });
+
+  it('returns 502 when the webhook is unreachable', async () => {
+    process.env.N8N_JOBMANAGER_WEBHOOK_URL = 'https://n8n.example/webhook/x';
+    global.fetch = jest.fn().mockRejectedValue(new Error('network down'));
+    const res = await POST(req(validBody));
+    expect(res.status).toBe(502);
+  });
+
+  it('returns 502 when the webhook responds non-OK', async () => {
+    process.env.N8N_JOBMANAGER_WEBHOOK_URL = 'https://n8n.example/webhook/x';
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ ok: false, status: 500, body: null });
+    const res = await POST(req(validBody));
+    expect(res.status).toBe(502);
+  });
+
+  it('defaults toggles to research+resume when omitted', async () => {
+    process.env.N8N_JOBMANAGER_WEBHOOK_URL = 'https://n8n.example/webhook/x';
+    const stream = new ReadableStream({
+      start(c) {
+        c.enqueue(new TextEncoder().encode('{"type":"item","content":"hi"}\n'));
+        c.close();
+      },
+    });
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, body: stream });
+    const { toggles: _toggles, ...bodyNoToggles } = validBody;
+    const res = await POST(req(bodyNoToggles));
+    const sent = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body);
+    expect(sent.toggles).toEqual({
+      research: true,
+      resume: true,
+      cover: false,
+    });
+    expect(res.status).toBe(200);
+  });
 });
