@@ -71,6 +71,8 @@ app/
 │   │   └── route.ts
 │   └── test-runner/
 │       └── route.ts
+├── applications/
+│   └── page.tsx
 ├── auth/
 │   ├── callback/
 │   │   └── route.ts  # OAuth / PKCE callback. The provider redirects here with a `?code=...` which
@@ -83,6 +85,8 @@ app/
 ├── chat/
 │   └── page.tsx
 ├── components/
+│   ├── applications/
+│   │   └── ActionToggles.tsx
 │   ├── chat/
 │   │   ├── ChatContextPanel.tsx  # Right-hand panel with two views of the user's Zep memory:
 │   │   ├── ChatMessages.tsx
@@ -195,6 +199,7 @@ types/
 | `app/api/tasks/route.ts` |  | `GET`, `POST` |
 | `app/api/tasks/[id]/route.ts` |  | `PATCH`, `DELETE` |
 | `app/api/test-runner/route.ts` |  | `POST` |
+| `app/applications/page.tsx` |  | `ApplicationsPage` |
 | `app/auth/callback/route.ts` | OAuth / PKCE callback. The provider redirects here with a `?code=...` which | `GET` |
 | `app/auth/confirm/route.ts` | Email confirmation / magic-link handler. Supabase emails a link containing a | `GET` |
 | `app/auth/signout/route.ts` | Signs the user out and sends them to /login. Called by the Sign Out form in | `POST` |
@@ -206,6 +211,7 @@ types/
 | `app/components/PageHero.tsx` | The shared page header used at the top of every top-level page (Design, Charts, | `PageHero` |
 | `app/components/PageShell.tsx` | The standard page frame for every top-level content page (Design, Charts, Chat, | `PageShell` |
 | `app/components/ThemeToggle.tsx` |  | `ThemeToggle` |
+| `app/components/applications/ActionToggles.tsx` |  | `ActionToggles` |
 | `app/components/chat/ChatContextPanel.tsx` | Right-hand panel with two views of the user's Zep memory: | `ChatContextPanel` |
 | `app/components/chat/ChatMessages.tsx` |  | `ChatMessages` |
 | `app/components/chat/ChatSessionSidebar.tsx` |  | `ChatSessionSidebar` |
