@@ -55,7 +55,7 @@ app/
 ├── api/
 │   ├── applications/
 │   │   └── chat/
-│   │       └── route.ts  # Proxy the chat request to the Job Application Manager n8n agent and stream
+│   │       └── route.ts  # Append a plain-English action directive to the user's message so the agent
 │   ├── chat/
 │   │   └── route.ts  # Proxy the request to the n8n workflow and stream its reply back.
 │   ├── client-errors/
@@ -191,7 +191,7 @@ types/
 | `app/global-error.tsx` | Global error boundary. Catches errors thrown in the root layout itself, where | `GlobalError` |
 | `app/layout.tsx` | Applies the saved theme before paint (see public/theme-init.js) to | `metadata`, `RootLayout` |
 | `app/page.tsx` |  | `HomePage` |
-| `app/api/applications/chat/route.ts` | Proxy the chat request to the Job Application Manager n8n agent and stream | `maxDuration`, `POST` |
+| `app/api/applications/chat/route.ts` | Append a plain-English action directive to the user's message so the agent | `maxDuration`, `POST` |
 | `app/api/chat/route.ts` | Proxy the request to the n8n workflow and stream its reply back. | `maxDuration`, `POST` |
 | `app/api/client-errors/route.ts` | Receives client-side crash reports and records them server-side via the | `POST` |
 | `app/api/memory/search/route.ts` | POST /api/memory/search — run an auto graph search over the signed-in user's | `POST` |

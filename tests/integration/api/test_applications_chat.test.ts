@@ -73,6 +73,14 @@ describe('POST /api/applications/chat', () => {
       resume: true,
       cover: false,
     });
+    // The toggles are composed into the message as a plain-English directive so
+    // the agent reliably honors them (cover is off here → must be told NOT to).
+    expect(sent.message).toContain(
+      'ONLY perform: company research, resume tailoring'
+    );
+    expect(sent.message).toContain(
+      'Do NOT perform or call tools for: cover letter'
+    );
     expect(res.status).toBe(200);
   });
 

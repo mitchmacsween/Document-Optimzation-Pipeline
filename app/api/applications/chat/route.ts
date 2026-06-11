@@ -31,6 +31,34 @@ function latestUserText(messages: UiMessage[]): string {
     .trim();
 }
 
+const ACTION_KEYS = ['research', 'resume', 'cover'] as const;
+const ACTION_LABELS: Record<(typeof ACTION_KEYS)[number], string> = {
+  research: 'company research',
+  resume: 'resume tailoring',
+  cover: 'cover letter',
+};
+type ActionToggles = Record<(typeof ACTION_KEYS)[number], boolean>;
+
+/**
+ * Append a plain-English action directive to the user's message so the agent
+ * reliably honors the selection boxes. We compose it into the text (rather than
+ * relying on the agent reading a structured `toggles` object, which n8n renders
+ * as `[object Object]`).
+ */
+function composeMessage(userText: string, toggles: ActionToggles): string {
+  const label = (keys: readonly string[]) =>
+    keys
+      .map((k) => ACTION_LABELS[k as keyof typeof ACTION_LABELS])
+      .join(', ') || 'none';
+  const enabled = ACTION_KEYS.filter((k) => toggles[k]);
+  const disabled = ACTION_KEYS.filter((k) => !toggles[k]);
+  return (
+    `${userText}\n\n` +
+    `[Action settings for this request — ONLY perform: ${label(enabled)}. ` +
+    `Do NOT perform or call tools for: ${label(disabled)}.]`
+  );
+}
+
 function jsonError(message: string, status: number): Response {
   return new Response(JSON.stringify({ error: message }), {
     status,
@@ -93,7 +121,7 @@ export async function POST(request: Request): Promise<Response> {
             : {}),
         },
         body: JSON.stringify({
-          message: userText,
+          message: composeMessage(userText, toggles),
           sessionId,
           userId,
           toggles,
