@@ -1,5 +1,7 @@
 # Job Application Manager v3 — Phase 1 Implementation Plan
 
+> ⚠️ **SUPERSEDED (2026-06-11)** by `2026-06-11-job-application-manager-v3-rev2-phase1.md`. This plan implemented the deterministic-pipeline architecture (Rev 1), which was reversed in favor of a chat interface to the agent (Rev 2). Tasks 1–8 here were built then retired; kept for history.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Stand up the new "Job Application Manager v3" entry point — a `/applications` page that submits a one-off job to a NEW deterministic n8n workflow and shows live per-run progress via Supabase Realtime. No human-approval gate yet (auto-proceeds through the agents).
