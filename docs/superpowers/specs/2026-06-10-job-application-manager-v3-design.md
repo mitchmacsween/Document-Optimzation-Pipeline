@@ -1,7 +1,9 @@
 # Job Application Manager v3 — Design
 
+> ⚠️ **SUPERSEDED (2026-06-11)** by `2026-06-11-job-application-manager-v3-design-rev2.md`. This Rev 1 chose a deterministic-pipeline architecture that replaced the LLM agent; the decision was reversed in favor of keeping the agent and using the front-end as a chat interface. Kept for history.
+
 **Date:** 2026-06-10
-**Status:** Approved for planning
+**Status:** Superseded by Rev 2
 **Scope:** Redesign the n8n "Job Application Manager" multi-agent system and connect it to the Next.js template front-end, adding a human approval loop and Zep long-term memory.
 
 ---
