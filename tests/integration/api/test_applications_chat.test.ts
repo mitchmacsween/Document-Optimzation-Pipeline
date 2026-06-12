@@ -18,9 +18,13 @@ jest.mock('@/lib/zep/chat-memory', () => ({
   retrieveUserContext: jest.fn(),
   recordChatTurn: jest.fn(),
 }));
-// createCaptureStream: pass-through that still lets the stream flow
+// createCaptureStream: pass-through that also fires the capture callback once,
+// simulating the stream finishing, so we can assert recordChatTurn is invoked.
 jest.mock('@/lib/zep/stream-capture', () => ({
-  createCaptureStream: () => new TransformStream(),
+  createCaptureStream: (cb: (text: string) => void | Promise<void>) => {
+    void Promise.resolve().then(() => cb('Proposed strategy ready'));
+    return new TransformStream();
+  },
 }));
 
 const validBody = {
@@ -150,6 +154,16 @@ describe('POST /api/applications/chat', () => {
     const sent = JSON.parse(init.body);
     expect(sent.context).toBe('PRIOR CONTEXT');
     expect(retrieveUserContext).toHaveBeenCalled();
+    // The capture callback fires on stream completion → records the turn to Zep
+    // with the CLEAN user text (not the toggle-directive-composed message).
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(recordChatTurn).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        userText: 'Tailor me for the Stripe PM role',
+        threadId: 's1',
+      })
+    );
   });
 
   it('does not call Zep when dormant (getZepClient null)', async () => {
