@@ -84,6 +84,34 @@ async function getSignedInUser(): Promise<User | null> {
 }
 
 /**
+ * Upsert a row in n8n_chat_sessions so the sidebar can list this conversation
+ * and RLS lets the browser read its history. Failures are non-fatal: the chat
+ * response is never blocked by a sidebar bookkeeping error.
+ */
+async function ensureSessionRow(
+  sessionId: string,
+  userId: string,
+  userText: string
+): Promise<void> {
+  try {
+    const supabase = await createClient();
+    await supabase.from('n8n_chat_sessions').upsert(
+      {
+        session_id: sessionId,
+        user_id: userId,
+        name: userText.slice(0, 60) || 'New application',
+      },
+      { onConflict: 'session_id', ignoreDuplicates: true }
+    );
+  } catch (err) {
+    logger.warn('ensureSessionRow failed', {
+      sessionId,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    });
+  }
+}
+
+/**
  * Proxy the chat request to the Job Application Manager n8n agent and stream
  * its reply back to the UI.
  *
@@ -120,6 +148,13 @@ export async function POST(request: Request): Promise<Response> {
   if (webhookUrl) {
     const zep = getZepClient();
     const user = await getSignedInUser();
+
+    // Upsert the session row so the sidebar lists this conversation and RLS
+    // lets the browser read its history. Fire-and-forget; never blocks the chat.
+    if (user) {
+      void ensureSessionRow(sessionId, user.id, userText);
+    }
+
     const context = zep
       ? await retrieveUserContext(
           zep,

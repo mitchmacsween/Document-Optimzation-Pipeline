@@ -5,11 +5,12 @@ import '@testing-library/jest-dom';
 
 // Stub AI SDK + transport — ESM packages that Jest can't transform from node_modules.
 const mockSendMessage = jest.fn();
+const mockSetMessages = jest.fn();
 jest.mock('@ai-sdk/react', () => ({
   useChat: () => ({
     messages: [],
     sendMessage: mockSendMessage,
-    setMessages: jest.fn(),
+    setMessages: mockSetMessages,
     status: 'ready',
     error: undefined,
   }),
@@ -28,6 +29,9 @@ jest.mock('react-markdown', () => ({
 jest.mock('remark-gfm', () => ({ __esModule: true, default: () => {} }));
 
 // Navigation reads auth state via the Supabase browser client.
+// ChatSessionSidebar also calls from('n8n_chat_sessions').select(...).order(...)
+// and sets up a Realtime channel. We stub all of this.
+const mockRemoveChannel = jest.fn();
 jest.mock('@/lib/supabase/client', () => ({
   createClient: () => ({
     auth: {
@@ -38,6 +42,19 @@ jest.mock('@/lib/supabase/client', () => ({
         data: { subscription: { unsubscribe: jest.fn() } },
       }),
     },
+    from: () => ({
+      select: () => ({
+        order: jest.fn().mockResolvedValue({ data: [], error: null }),
+        eq: jest.fn().mockResolvedValue({ data: [], error: null }),
+      }),
+    }),
+    channel: () => ({
+      on: function () {
+        return this;
+      },
+      subscribe: jest.fn(),
+    }),
+    removeChannel: mockRemoveChannel,
   }),
 }));
 
@@ -46,6 +63,8 @@ import ApplicationsPage from '@/app/applications/page';
 describe('ApplicationsPage', () => {
   beforeEach(() => {
     mockSendMessage.mockReset();
+    mockSetMessages.mockReset();
+    mockRemoveChannel.mockReset();
   });
 
   it('does not show the approve button when there are no messages', () => {
@@ -109,5 +128,13 @@ describe('ApplicationsPage', () => {
     expect(mockSendMessage).toHaveBeenCalledWith({
       text: 'Tell me about this job',
     });
+  });
+
+  it('renders the session sidebar with a "New chat" button', () => {
+    render(<ApplicationsPage />);
+
+    expect(
+      screen.getByRole('button', { name: /new chat/i })
+    ).toBeInTheDocument();
   });
 });
