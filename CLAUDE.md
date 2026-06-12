@@ -79,12 +79,16 @@ app/
 │   ├── chat/
 │   │   ├── ChatMessages.tsx
 │   │   └── ChatSessionSidebar.tsx
+│   ├── dashboard/
+│   │   └── RecentApplications.tsx
 │   ├── ExampleComponent.tsx
 │   ├── Navigation.tsx
 │   ├── OAuthButtons.tsx  # Social sign-in buttons. OAuth must be initiated from the browser because it
 │   ├── PageHero.tsx  # The shared page header used at the top of every top-level page (Design, Charts,
 │   ├── PageShell.tsx  # The standard page frame for every top-level content page (Design, Charts, Chat,
 │   └── ThemeToggle.tsx
+├── dashboard/
+│   └── page.tsx
 ├── design/
 │   ├── components/
 │   │   ├── AddComponentGuide.tsx  # A taste of the wider shadcn registry — components that aren't installed yet
@@ -188,6 +192,8 @@ types/
 | `app/components/applications/ApprovalActions.tsx` |  | `ApprovalActions` |
 | `app/components/chat/ChatMessages.tsx` |  | `ChatMessages` |
 | `app/components/chat/ChatSessionSidebar.tsx` |  | `ChatSessionSidebar` |
+| `app/components/dashboard/RecentApplications.tsx` |  | `RecentApplications` |
+| `app/dashboard/page.tsx` |  | `DashboardPage` |
 | `app/design/page.tsx` |  | `metadata`, `DesignPage` |
 | `app/design/components/AddComponentGuide.tsx` | A taste of the wider shadcn registry — components that aren't installed yet | `AddComponentGuide` |
 | `app/design/components/ColorTokens.tsx` | The living color palette. Each swatch renders with its real token class | `ColorTokens` |

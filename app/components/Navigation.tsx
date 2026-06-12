@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './ThemeToggle';
 
 const NAV_LINKS = [
+  { href: '/dashboard', label: 'Dashboard' },
   { href: '/test-dashboard', label: 'Tests' },
   { href: '/design', label: 'Design' },
   { href: '/memory', label: 'Memory' },
