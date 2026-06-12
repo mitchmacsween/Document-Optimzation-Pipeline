@@ -88,8 +88,8 @@ export function UserSummaryCard() {
           ) : (
             <p className="rounded-lg bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
               No long-term memory yet. Head to the{' '}
-              <a className="underline" href="/chat">
-                Chat
+              <a className="underline" href="/">
+                home
               </a>{' '}
               page and tell the assistant about yourself — Zep builds your
               summary from those conversations.
