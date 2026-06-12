@@ -106,11 +106,8 @@ app/
 ├── memory/
 │   ├── components/
 │   │   ├── GraphSearchExplorer.tsx  # Interactive: runs an auto graph search over the student's own Zep graph via
-│   │   ├── HowWeUseZepSection.tsx  # Grounds the concepts in *this* app: how the chat page uses Zep to remember
-│   │   ├── KnowledgeGraphSection.tsx  # Explains a knowledge graph in plain language: instead of storing chat logs as
 │   │   ├── sample-queries.ts  # Starter queries for the graph search explorer. They're phrased the way a
-│   │   ├── UserSummaryCard.tsx  # Interactive: fetches the signed-in student's long-term memory (their Zep
-│   │   └── WhatIsMemorySection.tsx  # Frames the problem first: a plain chatbot forgets everything the moment a
+│   │   └── UserSummaryCard.tsx  # Interactive: fetches the signed-in student's long-term memory (their Zep
 │   └── page.tsx
 ├── signup/
 │   └── page.tsx
@@ -207,11 +204,8 @@ types/
 | `app/login/page.tsx` |  | `LoginPage`, `default` |
 | `app/memory/page.tsx` |  | `metadata`, `MemoryPage` |
 | `app/memory/components/GraphSearchExplorer.tsx` | Interactive: runs an auto graph search over the student's own Zep graph via | `GraphSearchExplorer` |
-| `app/memory/components/HowWeUseZepSection.tsx` | Grounds the concepts in *this* app: how the chat page uses Zep to remember | `HowWeUseZepSection` |
-| `app/memory/components/KnowledgeGraphSection.tsx` | Explains a knowledge graph in plain language: instead of storing chat logs as | `KnowledgeGraphSection` |
 | `app/memory/components/sample-queries.ts` | Starter queries for the graph search explorer. They're phrased the way a | `SAMPLE_QUERIES` |
 | `app/memory/components/UserSummaryCard.tsx` | Interactive: fetches the signed-in student's long-term memory (their Zep | `UserSummaryCard` |
-| `app/memory/components/WhatIsMemorySection.tsx` | Frames the problem first: a plain chatbot forgets everything the moment a | `WhatIsMemorySection` |
 | `app/signup/page.tsx` |  | `SignupPage`, `default` |
 | `app/test-dashboard/page.tsx` |  | `TestDashboard` |
 | `app/test-dashboard/types.ts` |  | `TestResult`, `TestSuite`, `Coverage`, `TestSummary`, `TestRunResult` |

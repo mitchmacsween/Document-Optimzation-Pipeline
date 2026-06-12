@@ -2,57 +2,51 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-// The page renders the shared Navigation (a client component that calls
-// Supabase). Stub it so this test focuses on the educational memory content.
+// Stub Navigation (client component that calls Supabase auth).
 jest.mock('@/app/components/Navigation', () => ({
   __esModule: true,
   default: () => <nav data-testid="nav" />,
 }));
 
+// Stub the two interactive cards so this test stays focused on the page
+// shell — each card has its own dedicated test file.
+jest.mock('@/app/memory/components/UserSummaryCard', () => ({
+  UserSummaryCard: () => (
+    <div data-testid="user-summary-card">UserSummaryCard</div>
+  ),
+}));
+
+jest.mock('@/app/memory/components/GraphSearchExplorer', () => ({
+  GraphSearchExplorer: () => (
+    <div data-testid="graph-search-explorer">GraphSearchExplorer</div>
+  ),
+}));
+
 import MemoryPage from '@/app/memory/page';
 
-describe('Memory & Knowledge Graphs page', () => {
+describe('Memory page', () => {
   beforeEach(() => {
     render(<MemoryPage />);
   });
 
-  it('has a single page title about how AI remembers you', () => {
-    expect(
-      screen.getByRole('heading', { level: 1, name: /remembers? you/i })
-    ).toBeInTheDocument();
+  it('renders the hero heading about remembering you', () => {
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
   });
 
-  it('explains what long-term memory is for an AI agent', () => {
-    expect(
-      screen.getByRole('heading', { name: /long-term memory/i })
-    ).toBeInTheDocument();
+  it('renders the UserSummaryCard', () => {
+    expect(screen.getByTestId('user-summary-card')).toBeInTheDocument();
   });
 
-  it('explains knowledge graphs in plain language (nodes, edges, episodes)', () => {
-    expect(
-      screen.getByRole('heading', { name: /what is a knowledge graph/i })
-    ).toBeInTheDocument();
-    expect(screen.getAllByText(/nodes/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/edges/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/episodes/i).length).toBeGreaterThan(0);
+  it('renders the GraphSearchExplorer', () => {
+    expect(screen.getByTestId('graph-search-explorer')).toBeInTheDocument();
   });
 
-  it('explains how this app uses Zep for chat memory', () => {
-    expect(screen.getAllByText(/zep/i).length).toBeGreaterThan(0);
-  });
-
-  it('includes the interactive "fetch my long-term memory" tool', () => {
+  it('does NOT render the old explainer sections', () => {
     expect(
-      screen.getByRole('button', { name: /summary|memory/i })
-    ).toBeInTheDocument();
-  });
-
-  it('includes the interactive graph search explorer', () => {
+      screen.queryByRole('heading', { name: /what is a knowledge graph/i })
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: /search the knowledge graph/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /^search$/i })
-    ).toBeInTheDocument();
+      screen.queryByRole('heading', { name: /long-term memory/i })
+    ).not.toBeInTheDocument();
   });
 });
