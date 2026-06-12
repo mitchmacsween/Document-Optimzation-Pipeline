@@ -1,10 +1,17 @@
 import { createTextStreamResponse, simulateReadableStream } from 'ai';
 import { z } from 'zod';
+import type { User } from '@supabase/supabase-js';
 import { createN8nTextStream } from '@/lib/n8n-stream';
 import { createClient } from '@/lib/supabase/server';
 import { logger } from '@/lib/logger';
+import { getZepClient } from '@/lib/zep/client';
+import { retrieveUserContext, recordChatTurn } from '@/lib/zep/chat-memory';
+import { createCaptureStream } from '@/lib/zep/stream-capture';
 
 export const maxDuration = 30;
+
+// Cap the Zep context lookup so a slow memory service never stalls the reply.
+const ZEP_CONTEXT_TIMEOUT_MS = 3000;
 
 const uiMessageSchema = z.object({
   role: z.string(),
@@ -66,13 +73,13 @@ function jsonError(message: string, status: number): Response {
   });
 }
 
-async function getUserId(): Promise<string | undefined> {
+async function getSignedInUser(): Promise<User | null> {
   try {
     const supabase = await createClient();
     const { data } = await supabase.auth.getUser();
-    return data.user?.id;
+    return data.user ?? null;
   } catch {
-    return undefined;
+    return null;
   }
 }
 
@@ -83,7 +90,9 @@ async function getUserId(): Promise<string | undefined> {
  * - Targets `N8N_JOBMANAGER_WEBHOOK_URL` / `N8N_JOBMANAGER_WEBHOOK_SECRET`.
  * - Forwards `toggles` (research / resume / cover) so the workflow can branch.
  * - Falls back to a placeholder stream when the URL is unset.
- * - Zep memory wiring is intentionally deferred (YAGNI for Phase 1).
+ * - When Zep is active, the user's long-term context is retrieved and injected
+ *   into the n8n body, and the streamed reply is captured to record the clean
+ *   user turn (not the composed directive message) once streaming finishes.
  */
 export async function POST(request: Request): Promise<Response> {
   let json: unknown;
@@ -109,7 +118,17 @@ export async function POST(request: Request): Promise<Response> {
 
   // ---- Real n8n agent: proxy the workflow and stream its response back ----
   if (webhookUrl) {
-    const userId = await getUserId();
+    const zep = getZepClient();
+    const user = await getSignedInUser();
+    const context = zep
+      ? await retrieveUserContext(
+          zep,
+          sessionId,
+          user?.id,
+          ZEP_CONTEXT_TIMEOUT_MS
+        )
+      : '';
+
     let upstream: Response;
     try {
       upstream = await fetch(webhookUrl, {
@@ -122,8 +141,9 @@ export async function POST(request: Request): Promise<Response> {
         },
         body: JSON.stringify({
           message: composeMessage(userText, toggles),
+          context,
           sessionId,
-          userId,
+          userId: user?.id,
           toggles,
           messages: parsed.data.messages,
         }),
@@ -145,9 +165,28 @@ export async function POST(request: Request): Promise<Response> {
       );
     }
 
-    const textStream = upstream.body
+    const baseTextStream = upstream.body
       .pipeThrough(new TextDecoderStream())
       .pipeThrough(createN8nTextStream());
+
+    // When Zep is active, tee the clean reply through a capture stream that
+    // logs the turn after streaming finishes. Record the clean userText (not
+    // the directive-composed message) — mirroring /api/chat exactly.
+    const textStream = zep
+      ? baseTextStream.pipeThrough(
+          createCaptureStream(async (assistantText) => {
+            if (user && userText.trim() && assistantText.trim()) {
+              await recordChatTurn(zep, {
+                supabaseUser: user,
+                threadId: sessionId,
+                userText,
+                assistantText,
+              });
+            }
+          })
+        )
+      : baseTextStream;
+
     return createTextStreamResponse({ textStream });
   }
 
