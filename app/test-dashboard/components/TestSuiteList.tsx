@@ -20,7 +20,7 @@ export function TestSuiteList({ testSuites }: { testSuites: TestSuite[] }) {
   };
 
   return (
-    <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+    <Card className="border border-border rounded-2xl shadow-soft">
       <CardHeader>
         <CardTitle className="font-display">Test Details</CardTitle>
       </CardHeader>
@@ -29,7 +29,7 @@ export function TestSuiteList({ testSuites }: { testSuites: TestSuite[] }) {
           {testSuites.map((suite, idx) => (
             <div
               key={idx}
-              className="overflow-hidden rounded-xl border-2 border-foreground"
+              className="overflow-hidden rounded-xl border border-border"
             >
               <Button
                 variant="ghost"

@@ -28,7 +28,7 @@ export function ConceptsSection() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+        <Card className="border border-border rounded-2xl shadow-soft">
           <CardHeader>
             <CardTitle className="font-display">
               What is a design system?
@@ -45,7 +45,7 @@ export function ConceptsSection() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+        <Card className="border border-border rounded-2xl shadow-soft">
           <CardHeader>
             <CardTitle className="font-display">What is shadcn/ui?</CardTitle>
             <CardDescription>Your ready-made building blocks</CardDescription>
@@ -58,7 +58,7 @@ export function ConceptsSection() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+        <Card className="border border-border rounded-2xl shadow-soft">
           <CardHeader>
             <CardTitle className="font-display">What is a token?</CardTitle>
             <CardDescription>A named design decision</CardDescription>
@@ -78,7 +78,7 @@ export function ConceptsSection() {
         </Card>
       </div>
 
-      <Card className="bg-muted/40 border-2 border-foreground rounded-2xl shadow-hard">
+      <Card className="bg-muted/40 border border-border rounded-2xl shadow-soft">
         <CardHeader>
           <CardTitle className="font-display text-base">
             How it all fits together

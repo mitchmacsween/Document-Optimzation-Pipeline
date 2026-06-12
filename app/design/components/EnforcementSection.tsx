@@ -93,7 +93,7 @@ function Layer({
   body: string;
 }) {
   return (
-    <div className="space-y-2 rounded-2xl border-2 border-foreground bg-card p-4 shadow-hard">
+    <div className="space-y-2 rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="flex items-center gap-2">
         {icon}
         <p className="font-medium">{title}</p>

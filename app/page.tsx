@@ -94,7 +94,7 @@ export default function HomePage() {
           onSelectSession={handleSelectSession}
           onNewChat={handleNewChat}
         />
-        <Card className="flex h-[70vh] flex-1 flex-col border-2 border-foreground rounded-2xl shadow-hard">
+        <Card className="flex h-[70vh] flex-1 flex-col border border-border rounded-2xl shadow-soft">
           <CardContent className="flex-1 overflow-y-auto space-y-4 pt-6">
             <ChatMessages messages={messages} status={status} error={error} />
           </CardContent>

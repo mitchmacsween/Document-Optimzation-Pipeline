@@ -21,7 +21,7 @@ export default async function LoginPage({
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
-      <Card className="w-full max-w-md border-2 border-foreground rounded-2xl shadow-hard">
+      <Card className="w-full max-w-md border border-border rounded-2xl shadow-soft">
         <CardHeader className="space-y-3">
           <span className="relative block h-8 w-8" aria-hidden="true">
             <span className="absolute left-0 h-8 w-4 rounded-l-full bg-primary" />
