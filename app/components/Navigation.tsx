@@ -45,10 +45,10 @@ export default function Navigation() {
       <div className="mx-auto flex h-16 w-full max-w-content items-center justify-between gap-4 px-6 md:px-9">
         <Link
           href="/"
-          className="flex items-center gap-3 font-display text-lg font-extrabold tracking-tight transition-opacity hover:opacity-80"
+          className="flex items-center gap-3 font-display text-lg font-extrabold tracking-tight text-brand transition-opacity hover:opacity-80"
         >
           <LogoMark />
-          MMM · MPD² Studio
+          MMM
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

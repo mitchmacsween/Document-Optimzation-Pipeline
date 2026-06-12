@@ -33,6 +33,8 @@
     --coral-foreground: 22 30% 16%;
     --teal: 167 64% 33%;
     --teal-foreground: 40 40% 97%;
+    --brand: 264 52% 34%; /* Northwestern Purple #4E2A84 — brand mark only */
+    --brand-foreground: 40 40% 97%;
 
     --chart-1: 28 16% 12%;
     --chart-2: 167 64% 33%;
@@ -69,6 +71,8 @@
     --coral-foreground: 22 30% 14%;
     --teal: 167 52% 50%;
     --teal-foreground: 30 30% 10%;
+    --brand: 263 58% 70%; /* brighter purple for dark surfaces */
+    --brand-foreground: 30 20% 10%;
 
     --chart-1: 40 33% 90%;
     --chart-2: 167 52% 50%;

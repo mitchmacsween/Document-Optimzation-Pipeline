@@ -28,6 +28,8 @@ colors:
   coralForeground: '#352A20'
   teal: '#1E8A73'
   tealForeground: '#FAF8F4'
+  brand: '#4E2A84'
+  brandForeground: '#FAF8F4'
   chart1: '#231C16'
   chart2: '#1E8A73'
   chart3: '#F2B32C'
@@ -151,7 +153,9 @@ chart series — it reads as very dark warm brown/charcoal, not black. Neutrals
 tones rather than cool grey. The one highlight accent is `coral` (`#F0A98F`) — a soft
 salmon — used for the logo mark, callouts, and badges; it has a paired
 `coralForeground` (`#352A20`) tuned for WCAG AA contrast. `gold` and `teal` remain in
-the palette for data visualization and status indicators. `destructive` (`#DC2828`) is
+the palette for data visualization and status indicators. `brand` (`#4E2A84`,
+Northwestern Purple) is reserved exclusively for the **MMM brand wordmark** in the
+nav — it is not a general-purpose accent. `destructive` (`#DC2828`) is
 reserved for errors and destructive actions only. The app ships with a full **dark
 theme** (the `.dark` block in `app/globals.css`): warm charcoal surfaces and a
 cream-toned primary, same token names.

@@ -61,6 +61,10 @@ module.exports = {
           DEFAULT: 'hsl(var(--teal))',
           foreground: 'hsl(var(--teal-foreground))',
         },
+        brand: {
+          DEFAULT: 'hsl(var(--brand))',
+          foreground: 'hsl(var(--brand-foreground))',
+        },
         chart: {
           1: 'hsl(var(--chart-1))',
           2: 'hsl(var(--chart-2))',
