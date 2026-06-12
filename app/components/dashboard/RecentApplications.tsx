@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { Trash2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { deleteSession } from '@/lib/applications/sessions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { ChatSession } from '@/types/supabase';
 
@@ -23,6 +25,16 @@ export function RecentApplications() {
 
     void load();
   }, []);
+
+  async function handleDelete(session: ChatSession) {
+    if (!window.confirm(`Delete "${session.name}"? This cannot be undone.`)) {
+      return;
+    }
+    await deleteSession(session.session_id);
+    setSessions((prev) =>
+      prev.filter((s) => s.session_id !== session.session_id)
+    );
+  }
 
   if (!loaded) {
     return (
@@ -47,10 +59,18 @@ export function RecentApplications() {
         {sessions.map((session) => (
           <li key={session.id}>
             <Card>
-              <CardHeader className="pb-2">
+              <CardHeader className="flex flex-row items-start justify-between pb-2">
                 <CardTitle className="text-base font-semibold leading-snug">
                   {session.name}
                 </CardTitle>
+                <button
+                  type="button"
+                  aria-label={`Delete conversation "${session.name}"`}
+                  onClick={() => void handleDelete(session)}
+                  className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 size={14} />
+                </button>
               </CardHeader>
               <CardContent>
                 <p className="text-xs text-muted-foreground">
