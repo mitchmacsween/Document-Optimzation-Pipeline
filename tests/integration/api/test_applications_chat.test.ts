@@ -18,6 +18,9 @@ jest.mock('@/lib/zep/chat-memory', () => ({
   retrieveUserContext: jest.fn(),
   recordChatTurn: jest.fn(),
 }));
+
+// Per-call upsert mock so we can assert n8n_chat_sessions was upserted.
+const mockUpsert = jest.fn().mockResolvedValue({ error: null });
 // createCaptureStream: pass-through that also fires the capture callback once,
 // simulating the stream finishing, so we can assert recordChatTurn is invoked.
 jest.mock('@/lib/zep/stream-capture', () => ({
@@ -49,9 +52,20 @@ beforeEach(() => {
   jest.clearAllMocks();
   process.env = { ...origEnv };
   delete process.env.N8N_JOBMANAGER_WEBHOOK_URL;
+  // Reset the upsert mock on each test.
+  mockUpsert.mockResolvedValue({ error: null });
+  // createClient is called multiple times: once in getSignedInUser (auth path)
+  // and once in ensureSessionRow (upsert path). Both calls use the same mock
+  // that returns a client with both auth and from.
   (createClient as jest.Mock).mockResolvedValue({
     auth: {
       getUser: jest.fn().mockResolvedValue({ data: { user: { id: 'u1' } } }),
+    },
+    from: (table: string) => {
+      if (table === 'n8n_chat_sessions') {
+        return { upsert: mockUpsert };
+      }
+      return {};
     },
   });
   // Default: Zep dormant (ZEP_API_KEY unset in test env)
@@ -182,5 +196,30 @@ describe('POST /api/applications/chat', () => {
     const [, init] = (global.fetch as jest.Mock).mock.calls[0];
     const sent = JSON.parse(init.body);
     expect(sent.context).toBe('');
+  });
+
+  it('upserts a session row in n8n_chat_sessions when user is signed in (webhook path)', async () => {
+    process.env.N8N_JOBMANAGER_WEBHOOK_URL = 'https://n8n.example/webhook/x';
+    const stream = new ReadableStream({
+      start(c) {
+        c.enqueue(new TextEncoder().encode('{"type":"item","content":"hi"}\n'));
+        c.close();
+      },
+    });
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, body: stream });
+
+    const res = await POST(req(validBody));
+    expect(res.status).toBe(200);
+
+    expect(mockUpsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        session_id: 's1',
+        name: expect.any(String),
+      }),
+      expect.objectContaining({ onConflict: 'session_id' })
+    );
+    // The name must be non-empty (derived from userText).
+    const [upsertArg] = mockUpsert.mock.calls[0];
+    expect(upsertArg.name).toBeTruthy();
   });
 });
