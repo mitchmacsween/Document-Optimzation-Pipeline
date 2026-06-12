@@ -2,14 +2,14 @@
 name: Northwestern MMM & MPD2 Starter
 colors:
   # Light theme — these mirror the :root values in app/globals.css.
-  background: '#F1EDE4'
+  background: '#F2EDE3'
   foreground: '#1B1713'
-  card: '#F9F6F1'
+  card: '#FBF6EE'
   cardForeground: '#1B1713'
-  popover: '#F9F6F1'
+  popover: '#FBF6EE'
   popoverForeground: '#1B1713'
-  primary: '#4E2A84' # Northwestern Purple
-  primaryForeground: '#FAF8F4'
+  primary: '#231C16'
+  primaryForeground: '#FBF7F0'
   secondary: '#E4DCCE'
   secondaryForeground: '#2B241D'
   muted: '#E6E1D5'
@@ -18,20 +18,22 @@ colors:
   accentForeground: '#2B241D'
   destructive: '#DC2828'
   destructiveForeground: '#FAF8F4'
-  border: '#D7CEC1'
-  input: '#D7CEC1'
-  ring: '#4E2A84'
+  border: '#E6DDCF'
+  input: '#E6DDCF'
+  ring: '#231C16'
   # Studio accent palette (each paired with a *-foreground for contrast).
   gold: '#F2B32C'
   goldForeground: '#28201A'
-  coral: '#EB5E33'
-  coralForeground: '#28201A'
+  coral: '#F0A98F'
+  coralForeground: '#352A20'
   teal: '#1E8A73'
   tealForeground: '#FAF8F4'
-  chart1: '#4E2A84'
+  brand: '#4E2A84'
+  brandForeground: '#FAF8F4'
+  chart1: '#231C16'
   chart2: '#1E8A73'
   chart3: '#F2B32C'
-  chart4: '#EB5E33'
+  chart4: '#F0A98F'
   chart5: '#886BB3'
 typography:
   h1:
@@ -62,9 +64,9 @@ typography:
     fontWeight: 400
     lineHeight: '1rem'
 rounded:
-  sm: '6px'
-  md: '8px'
-  lg: '0.75rem'
+  sm: '12px'
+  md: '14px'
+  lg: '1rem'
 spacing:
   xs: '4px'
   sm: '8px'
@@ -76,18 +78,18 @@ components:
     backgroundColor: '{colors.primary}'
     textColor: '{colors.primaryForeground}'
     typography: '{typography.label}'
-    rounded: '{rounded.md}'
+    rounded: '9999px'
     padding: '0.5rem 1rem'
   buttonSecondary:
     backgroundColor: '{colors.secondary}'
     textColor: '{colors.secondaryForeground}'
     typography: '{typography.label}'
-    rounded: '{rounded.md}'
+    rounded: '9999px'
     padding: '0.5rem 1rem'
   card:
     backgroundColor: '{colors.card}'
     textColor: '{colors.cardForeground}'
-    rounded: '{rounded.lg}'
+    rounded: '1rem'
     padding: '1.5rem'
 ---
 
@@ -131,28 +133,32 @@ Each color token maps 1:1 to a CSS variable (drop the `--`, e.g. `primaryForegro
 
 ## Overview
 
-A bold, design-forward **"Studio Bauhaus"** identity built on **shadcn/ui**. The feel
-is warm and confident — cream paper surfaces and near-black ink, anchored by
-**Northwestern Purple** (`#4E2A84`) as the brand/action color and punctuated by a
-geometric accent trio (gold, coral, teal). Hierarchy comes from **thick ink borders
-and hard offset shadows** rather than soft elevation, with friendly rounded corners.
-It should read as crafted and energetic — the kind of polish design-innovation
-students recognize. A full **dark theme** (warm charcoal surfaces, a brighter purple)
-ships alongside and is toggled in the navigation. When a specific token isn't defined,
-lead with the purple, reach for one accent, and keep the border-and-shadow language
-consistent.
+A **refined warm editorial** identity built on **shadcn/ui**. The feel is unhurried
+and considered — bone-cream canvas surfaces, near-black ink as the primary, and a
+single soft coral/salmon accent. Depth comes from **soft layered shadows** and thin
+warm-toned borders rather than graphic offset shadows. Buttons are fully rounded pills;
+cards use generous `rounded-2xl` corners and subtle `shadow-soft` elevation. The
+overall impression is a high-end lifestyle or bar magazine — crafted, legible, and
+warm. A full **dark theme** (warm charcoal surfaces, cream-toned primary) ships
+alongside and is toggled in the navigation. When a specific token isn't defined, lead
+with the near-black `primary`, reach for coral as the single accent, and keep the
+thin-border / soft-shadow language consistent.
 
 ## Colors
 
-The palette is **warm cream neutrals + a Northwestern Purple primary + a geometric
-accent trio**. `primary` (`#4E2A84`) drives buttons, links, focus rings, and the
-first chart series. Neutrals (`background`, `foreground`, `secondary`, `muted`,
-`accent`, `border`) are warm off-whites and ink rather than cool slate. Three
-accents — `gold` (`#F2B32C`), `coral` (`#EB5E33`), and `teal` (`#1E8A73`) — carry the
-Bauhaus character on feature badges, callouts, and the logo mark; each has a paired
-`*Foreground` tuned for WCAG AA. `destructive` (`#DC2828`) is reserved for errors and
-destructive actions only. The app ships with a full **dark theme** (the `.dark` block
-in `app/globals.css`): warm charcoal surfaces and a brighter purple, same token names.
+The palette is **warm bone neutrals + a near-black ink primary + a single soft coral
+accent**. `primary` (`#231C16`) drives buttons, links, focus rings, and the first
+chart series — it reads as very dark warm brown/charcoal, not black. Neutrals
+(`background` `#F2EDE3`, `card` `#FBF6EE`, `border` `#E6DDCF`) are bone and parchment
+tones rather than cool grey. The one highlight accent is `coral` (`#F0A98F`) — a soft
+salmon — used for the logo mark, callouts, and badges; it has a paired
+`coralForeground` (`#352A20`) tuned for WCAG AA contrast. `gold` and `teal` remain in
+the palette for data visualization and status indicators. `brand` (`#4E2A84`,
+Northwestern Purple) is reserved exclusively for the **MMM brand wordmark** in the
+nav — it is not a general-purpose accent. `destructive` (`#DC2828`) is
+reserved for errors and destructive actions only. The app ships with a full **dark
+theme** (the `.dark` block in `app/globals.css`): warm charcoal surfaces and a
+cream-toned primary, same token names.
 
 ## Typography
 
@@ -174,31 +180,31 @@ responsively. Keep generous breathing room — prefer more whitespace over dense
 
 ## Elevation & Depth
 
-Depth is **graphic, not soft**. The signature move is a **hard offset shadow** —
-`shadow-hard` (`4px 4px 0` of the `foreground` ink), with `shadow-hard-sm` and
-`shadow-hard-lg` variants — paired with a **2px ink border** (`border-2
-border-foreground`). On hover, cards nudge up-and-left and the shadow grows, giving a
-tactile "sticker" feel. The shadow is token-driven, so it flips to a light offset in
-dark mode automatically. Reserve soft/blurred shadows for transient surfaces
-(popovers, dropdowns, dialogs); don't mix the two languages on the same element.
+Depth is **soft and layered**. The signature move is a **soft shadow** — `shadow-soft`
+(a layered warm-tinted box-shadow), with `shadow-soft-sm` and `shadow-soft-lg`
+variants — paired with a **thin warm border** (`border border-border`). On hover,
+interactive cards lift slightly (`-translate-y-0.5`) and the shadow deepens to
+`shadow-soft-lg`, giving a gentle, magazine-quality feel. The hard offset shadow
+variants (`shadow-hard`, `shadow-hard-sm`, `shadow-hard-lg`) remain in the theme for
+intentionally graphic moments; don't mix soft and hard shadows on the same element.
 
 ## Shapes
 
-Corners are **friendly and generous**. `rounded.lg` (`0.75rem`, the `--radius` value)
+Corners are **generous and pill-forward**. `rounded.lg` (`1rem`, the `--radius` value)
 is the base; `md` and `sm` derive from it for smaller controls. Cards use `rounded-2xl`
-for a soft, approachable feel, while interactive chips and buttons go fully `rounded-full`
-— the pill shape is part of the Bauhaus character. Keep radii consistent across a
-component family; the one deliberate exception is the geometric logo mark, which mixes a
-half-circle and a hard corner on purpose.
+for a wide, editorial feel. Buttons are fully `rounded-full` pills — this is the
+primary interactive shape language. Keep radii consistent across a component family;
+the one deliberate exception is the geometric logo mark, which mixes a half-circle and
+a hard corner on purpose.
 
 ## Components
 
 Reusable primitives live in `components/ui/` (shadcn/ui). Compose those first rather
 than hand-rolling markup. The token entries above capture the key ones:
 
-- **button** — violet `primary` surface, `primaryForeground` text, `md` corners.
-- **buttonSecondary** — the subtle `secondary` variant for low-emphasis actions.
-- **card** — neutral surface with `lg` corners and generous padding.
+- **button** — near-black `primary` surface, `primaryForeground` text, pill (`rounded-full`) shape.
+- **buttonSecondary** — the subtle `secondary` variant for low-emphasis actions, also pill-shaped.
+- **card** — bone-cream surface with `rounded-2xl` corners, thin `border-border`, and `shadow-soft` elevation.
 
 Express variants (hover, active, disabled) by adjusting the same tokens; keep the
 shape and typography consistent within a family.
@@ -210,6 +216,6 @@ shape and typography consistent within a family.
 - **Do** keep text/background pairs at **WCAG AA** contrast (≥ 4.5:1).
 - **Do** reach for a `components/ui/` primitive before writing custom UI.
 - **Don't** introduce new one-off colors; extend the palette here first.
-- **Don't** rely on heavy drop shadows for hierarchy — use borders and spacing.
+- **Don't** mix hard graphic shadows with soft editorial shadows on the same element.
 - **Don't** let this file drift: when you change `app/globals.css`, update the
   matching token here and run `npm run design:lint`.

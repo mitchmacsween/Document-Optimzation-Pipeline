@@ -24,7 +24,7 @@ export function WhyDesignSystemsSection() {
         </p>
       </div>
 
-      <figure className="rounded-2xl border-2 border-foreground bg-card p-6 shadow-hard">
+      <figure className="rounded-2xl border border-border bg-card p-6 shadow-soft">
         <Quote className="h-6 w-6 text-primary" aria-hidden />
         <blockquote className="mt-3 max-w-3xl font-display text-lg italic leading-snug">
           &ldquo;You haven&apos;t truly lived as a UX designer until you&apos;ve
@@ -87,7 +87,7 @@ function Symptom({
   body: string;
 }) {
   return (
-    <div className="space-y-2 rounded-2xl border-2 border-foreground bg-card p-4 shadow-hard">
+    <div className="space-y-2 rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="flex items-center gap-2">
         {icon}
         <p className="font-medium">{title}</p>

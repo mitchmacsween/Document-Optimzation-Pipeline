@@ -52,13 +52,13 @@ describe('cn', () => {
 });
 
 describe('studio card classes', () => {
-  it('studioCard carries the ink border and hard shadow', () => {
-    expect(studioCard).toContain('border-foreground');
-    expect(studioCard).toContain('shadow-hard');
+  it('studioCard carries the soft editorial shadow and thin border', () => {
+    expect(studioCard).toContain('border-border');
+    expect(studioCard).toContain('shadow-soft');
   });
 
   it('studioCardHover extends studioCard with a hover transform', () => {
     expect(studioCardHover.startsWith(studioCard)).toBe(true);
-    expect(studioCardHover).toContain('hover:shadow-hard-lg');
+    expect(studioCardHover).toContain('hover:shadow-soft-lg');
   });
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
 const mockOrderFn = jest.fn();
@@ -12,6 +13,11 @@ jest.mock('@/lib/supabase/client', () => ({
       }),
     }),
   }),
+}));
+
+const mockDeleteSession = jest.fn().mockResolvedValue(undefined);
+jest.mock('@/lib/applications/sessions', () => ({
+  deleteSession: (...args: unknown[]) => mockDeleteSession(...args),
 }));
 
 import { RecentApplications } from '@/app/components/dashboard/RecentApplications';
@@ -38,6 +44,8 @@ const SESSIONS = [
 describe('RecentApplications', () => {
   beforeEach(() => {
     mockOrderFn.mockReset();
+    mockDeleteSession.mockReset();
+    mockDeleteSession.mockResolvedValue(undefined);
   });
 
   it('displays a count and session names when data loads', async () => {
@@ -88,5 +96,97 @@ describe('RecentApplications', () => {
     expect(mockOrderFn).toHaveBeenCalledWith('updated_at', {
       ascending: false,
     });
+  });
+
+  it('renders a delete button for each application card', async () => {
+    mockOrderFn.mockResolvedValue({ data: SESSIONS, error: null });
+
+    render(<RecentApplications />);
+
+    await waitFor(() =>
+      expect(screen.getByText(/Software Engineer at Acme/i)).toBeInTheDocument()
+    );
+
+    expect(
+      screen.getByRole('button', {
+        name: /delete conversation "Software Engineer at Acme"/i,
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', {
+        name: /delete conversation "Product Manager at Globex"/i,
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('calls deleteSession and removes the item when delete is confirmed', async () => {
+    mockOrderFn.mockResolvedValue({ data: SESSIONS, error: null });
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
+
+    render(<RecentApplications />);
+
+    await waitFor(() =>
+      expect(screen.getByText(/Software Engineer at Acme/i)).toBeInTheDocument()
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: /delete conversation "Software Engineer at Acme"/i,
+      })
+    );
+
+    expect(mockDeleteSession).toHaveBeenCalledWith('sess-1');
+    await waitFor(() =>
+      expect(
+        screen.queryByText(/Software Engineer at Acme/i)
+      ).not.toBeInTheDocument()
+    );
+
+    jest.restoreAllMocks();
+  });
+
+  it('updates the count after deleting an item', async () => {
+    mockOrderFn.mockResolvedValue({ data: SESSIONS, error: null });
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
+
+    render(<RecentApplications />);
+
+    await waitFor(() =>
+      expect(screen.getByText(/2 application/i)).toBeInTheDocument()
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: /delete conversation "Software Engineer at Acme"/i,
+      })
+    );
+
+    await waitFor(() =>
+      expect(screen.getByText(/1 application/i)).toBeInTheDocument()
+    );
+
+    jest.restoreAllMocks();
+  });
+
+  it('does not call deleteSession when confirm is cancelled', async () => {
+    mockOrderFn.mockResolvedValue({ data: SESSIONS, error: null });
+    jest.spyOn(window, 'confirm').mockReturnValue(false);
+
+    render(<RecentApplications />);
+
+    await waitFor(() =>
+      expect(screen.getByText(/Software Engineer at Acme/i)).toBeInTheDocument()
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', {
+        name: /delete conversation "Software Engineer at Acme"/i,
+      })
+    );
+
+    expect(mockDeleteSession).not.toHaveBeenCalled();
+    expect(screen.getByText(/Software Engineer at Acme/i)).toBeInTheDocument();
+
+    jest.restoreAllMocks();
   });
 });

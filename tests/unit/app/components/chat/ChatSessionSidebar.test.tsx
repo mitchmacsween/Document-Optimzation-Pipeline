@@ -31,6 +31,11 @@ jest.mock('@/lib/supabase/client', () => ({
   }),
 }));
 
+const mockDeleteSession = jest.fn().mockResolvedValue(undefined);
+jest.mock('@/lib/applications/sessions', () => ({
+  deleteSession: (...args: unknown[]) => mockDeleteSession(...args),
+}));
+
 import { ChatSessionSidebar } from '@/app/components/chat/ChatSessionSidebar';
 
 function row(session_id: string, name: string) {
@@ -50,6 +55,8 @@ describe('ChatSessionSidebar', () => {
     mockRemoveChannel.mockReset();
     mockChannel.on.mockClear();
     mockChannel.subscribe.mockClear();
+    mockDeleteSession.mockReset();
+    mockDeleteSession.mockResolvedValue(undefined);
     realtime.cb = undefined;
   });
 
@@ -168,5 +175,106 @@ describe('ChatSessionSidebar', () => {
     await waitFor(() => expect(realtime.cb).toBeDefined());
     unmount();
     expect(mockRemoveChannel).toHaveBeenCalled();
+  });
+
+  it('renders a delete button for each session', async () => {
+    mockOrder.mockResolvedValue({
+      data: [row('s1', 'First chat')],
+      error: null,
+    });
+    render(
+      <ChatSessionSidebar
+        activeSessionId="s1"
+        onSelectSession={jest.fn()}
+        onNewChat={jest.fn()}
+      />
+    );
+    await screen.findByText('First chat');
+    expect(
+      screen.getByRole('button', {
+        name: /delete conversation "First chat"/i,
+      })
+    ).toBeInTheDocument();
+  });
+
+  it('calls deleteSession and removes the item when delete is confirmed', async () => {
+    mockOrder.mockResolvedValue({
+      data: [row('s1', 'First chat')],
+      error: null,
+    });
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
+    const onNewChat = jest.fn();
+
+    render(
+      <ChatSessionSidebar
+        activeSessionId="other"
+        onSelectSession={jest.fn()}
+        onNewChat={onNewChat}
+      />
+    );
+    await screen.findByText('First chat');
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /delete conversation "First chat"/i })
+    );
+
+    expect(mockDeleteSession).toHaveBeenCalledWith('s1');
+    await waitFor(() =>
+      expect(screen.queryByText('First chat')).not.toBeInTheDocument()
+    );
+
+    jest.restoreAllMocks();
+  });
+
+  it('calls onNewChat after deleting the active session', async () => {
+    mockOrder.mockResolvedValue({
+      data: [row('s1', 'First chat')],
+      error: null,
+    });
+    jest.spyOn(window, 'confirm').mockReturnValue(true);
+    const onNewChat = jest.fn();
+
+    render(
+      <ChatSessionSidebar
+        activeSessionId="s1"
+        onSelectSession={jest.fn()}
+        onNewChat={onNewChat}
+      />
+    );
+    await screen.findByText('First chat');
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /delete conversation "First chat"/i })
+    );
+
+    await waitFor(() => expect(onNewChat).toHaveBeenCalled());
+
+    jest.restoreAllMocks();
+  });
+
+  it('does not call deleteSession when confirm is cancelled', async () => {
+    mockOrder.mockResolvedValue({
+      data: [row('s1', 'First chat')],
+      error: null,
+    });
+    jest.spyOn(window, 'confirm').mockReturnValue(false);
+
+    render(
+      <ChatSessionSidebar
+        activeSessionId="other"
+        onSelectSession={jest.fn()}
+        onNewChat={jest.fn()}
+      />
+    );
+    await screen.findByText('First chat');
+
+    await userEvent.click(
+      screen.getByRole('button', { name: /delete conversation "First chat"/i })
+    );
+
+    expect(mockDeleteSession).not.toHaveBeenCalled();
+    expect(screen.getByText('First chat')).toBeInTheDocument();
+
+    jest.restoreAllMocks();
   });
 });

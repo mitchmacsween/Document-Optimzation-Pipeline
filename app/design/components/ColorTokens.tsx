@@ -145,7 +145,7 @@ export function ColorTokens() {
         {SURFACE_TOKENS.map((token) => (
           <div
             key={token.name}
-            className="overflow-hidden rounded-2xl border-2 border-foreground bg-card shadow-hard"
+            className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft"
           >
             <div
               data-token={token.name}
@@ -172,7 +172,7 @@ export function ColorTokens() {
         ))}
       </div>
 
-      <div className="rounded-2xl border-2 border-foreground bg-card p-5 shadow-hard">
+      <div className="rounded-2xl border border-border bg-card p-5 shadow-soft">
         <p className="mb-3 text-sm font-medium">
           Chart palette{' '}
           <span className="font-normal text-muted-foreground">

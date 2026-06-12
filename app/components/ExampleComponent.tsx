@@ -25,7 +25,7 @@ export default function ExampleComponent() {
   };
 
   return (
-    <Card className="rounded-2xl border-2 border-foreground bg-primary/5">
+    <Card className="rounded-2xl border border-border bg-primary/5">
       <CardContent className="pt-6 text-center">
         <p className="text-muted-foreground mb-4">
           This is an example interactive component. Click the button to see it

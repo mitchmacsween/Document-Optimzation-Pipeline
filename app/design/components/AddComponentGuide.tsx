@@ -102,7 +102,7 @@ export function AddComponentGuide() {
         ))}
       </div>
 
-      <div className="space-y-3 rounded-2xl border-2 border-foreground bg-card p-5 shadow-hard">
+      <div className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-soft">
         <div>
           <h3 className="font-semibold">What else you can add</h3>
           <p className="text-sm text-muted-foreground">
@@ -157,7 +157,7 @@ export function AddComponentGuide() {
 
 function StepCard({ step }: { step: Step }) {
   return (
-    <div className="min-w-0 flex-1 space-y-2 rounded-2xl border-2 border-foreground bg-card p-4 shadow-hard">
+    <div className="min-w-0 flex-1 space-y-2 rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div
         className={`flex h-11 w-11 items-center justify-center rounded-md ${
           step.isResult

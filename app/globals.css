@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    /* Studio Bauhaus — warm cream surfaces, Northwestern purple as primary */
-    --background: 40 33% 92%;
+    /* Warm editorial — bone canvas, near-black ink, soft coral accent */
+    --background: 38 33% 93%;
     --foreground: 30 18% 9%;
-    --card: 40 40% 96%;
+    --card: 40 44% 97%;
     --card-foreground: 30 18% 9%;
-    --popover: 40 40% 96%;
+    --popover: 40 44% 97%;
     --popover-foreground: 30 18% 9%;
-    --primary: 264 52% 34%; /* Northwestern Purple #4E2A84 */
+    --primary: 28 16% 12%;
     --primary-foreground: 40 40% 97%;
     --secondary: 40 28% 85%;
     --secondary-foreground: 30 20% 14%;
@@ -21,23 +21,25 @@
     --accent-foreground: 30 20% 14%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 40 40% 97%;
-    --border: 36 22% 80%;
-    --input: 36 22% 80%;
-    --ring: 264 52% 34%;
-    --radius: 0.75rem;
+    --border: 34 20% 86%;
+    --input: 34 20% 86%;
+    --ring: 28 16% 12%;
+    --radius: 1rem;
 
     /* Studio accent palette (paired with *-foreground for contrast) */
     --gold: 41 88% 56%;
     --gold-foreground: 30 30% 12%;
-    --coral: 14 82% 56%;
-    --coral-foreground: 30 30% 12%;
+    --coral: 13 80% 73%;
+    --coral-foreground: 22 30% 16%;
     --teal: 167 64% 33%;
     --teal-foreground: 40 40% 97%;
+    --brand: 264 52% 34%; /* Northwestern Purple #4E2A84 — brand mark only */
+    --brand-foreground: 40 40% 97%;
 
-    --chart-1: 264 52% 34%;
+    --chart-1: 28 16% 12%;
     --chart-2: 167 64% 33%;
     --chart-3: 41 88% 56%;
-    --chart-4: 14 82% 56%;
+    --chart-4: 13 80% 73%;
     --chart-5: 264 32% 56%;
   }
 
@@ -49,8 +51,8 @@
     --card-foreground: 40 30% 92%;
     --popover: 30 9% 12%;
     --popover-foreground: 40 30% 92%;
-    --primary: 263 58% 66%;
-    --primary-foreground: 30 20% 10%;
+    --primary: 40 33% 90%;
+    --primary-foreground: 28 16% 12%;
     --secondary: 30 8% 18%;
     --secondary-foreground: 40 30% 92%;
     --muted: 30 8% 18%;
@@ -61,19 +63,21 @@
     --destructive-foreground: 40 40% 97%;
     --border: 30 8% 22%;
     --input: 30 8% 22%;
-    --ring: 263 58% 66%;
+    --ring: 40 33% 90%;
 
     --gold: 41 82% 62%;
     --gold-foreground: 30 30% 10%;
-    --coral: 14 80% 63%;
-    --coral-foreground: 30 30% 10%;
+    --coral: 13 78% 72%;
+    --coral-foreground: 22 30% 14%;
     --teal: 167 52% 50%;
     --teal-foreground: 30 30% 10%;
+    --brand: 263 58% 70%; /* brighter purple for dark surfaces */
+    --brand-foreground: 30 20% 10%;
 
-    --chart-1: 263 58% 66%;
+    --chart-1: 40 33% 90%;
     --chart-2: 167 52% 50%;
     --chart-3: 41 82% 62%;
-    --chart-4: 14 80% 63%;
+    --chart-4: 13 78% 72%;
     --chart-5: 263 40% 76%;
   }
 }

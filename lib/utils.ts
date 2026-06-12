@@ -38,11 +38,13 @@ export function generateId(): string {
 }
 
 /**
- * Studio Bauhaus card chrome — 2px ink border + hard offset shadow.
- * Use `studioCard` for static panels, `studioCardHover` for interactive cards.
+ * Warm editorial card chrome — thin border + soft layered shadow.
+ * Use `studioCard` for static panels, `studioCardHover` for interactive cards
+ * (adds a subtle lift on hover).
  */
-export const studioCard = 'border-2 border-foreground rounded-2xl shadow-hard';
+export const studioCard =
+  'rounded-2xl border border-border bg-card shadow-soft';
 
 export const studioCardHover =
   studioCard +
-  ' transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg';
+  ' transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft-lg';

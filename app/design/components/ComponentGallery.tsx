@@ -115,7 +115,7 @@ function GalleryCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-3 rounded-2xl border-2 border-foreground bg-card p-5 shadow-hard">
+    <div className="space-y-3 rounded-2xl border border-border bg-card p-5 shadow-soft">
       <div>
         <h3 className="font-semibold">{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>

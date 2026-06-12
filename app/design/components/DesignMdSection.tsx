@@ -32,7 +32,7 @@ export function DesignMdSection() {
         <Card
           icon={<FileCode2 className="h-5 w-5 text-primary" />}
           title="Tokens — the what"
-          body="Machine-readable values at the top of the file: this exact purple, this font, this corner radius. The AI gets precise numbers, never a guess."
+          body="Machine-readable values at the top of the file: this exact ink color, this font, this corner radius. The AI gets precise numbers, never a guess."
         />
         <Card
           icon={<MessageSquareText className="h-5 w-5 text-primary" />}
@@ -41,7 +41,7 @@ export function DesignMdSection() {
         />
       </div>
 
-      <figure className="rounded-2xl border-2 border-foreground bg-card p-6 shadow-hard">
+      <figure className="rounded-2xl border border-border bg-card p-6 shadow-soft">
         <Quote className="h-6 w-6 text-primary" aria-hidden />
         <blockquote className="mt-3 max-w-3xl font-display text-lg italic leading-snug">
           &ldquo;Tokens give agents exact values. Prose tells them why those
@@ -91,7 +91,7 @@ function Card({
   body: string;
 }) {
   return (
-    <div className="space-y-2 rounded-2xl border-2 border-foreground bg-card p-4 shadow-hard">
+    <div className="space-y-2 rounded-2xl border border-border bg-card p-4 shadow-soft">
       <div className="flex items-center gap-2">
         {icon}
         <p className="font-medium">{title}</p>

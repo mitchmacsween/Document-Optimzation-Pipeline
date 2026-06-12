@@ -54,7 +54,7 @@ export default function TestDashboard() {
         subtitle="Run your tests and see the results in a friendly format"
       />
 
-      <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+      <Card className="border border-border rounded-2xl shadow-soft">
         <CardContent className="pt-6">
           <Button
             onClick={runTests}
@@ -85,7 +85,7 @@ export default function TestDashboard() {
           )}
 
           {results.error && (
-            <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+            <Card className="border border-border rounded-2xl shadow-soft">
               <CardContent className="pt-6">
                 <div className="rounded-xl border-l-4 border-destructive bg-destructive/10 p-4">
                   <p className="text-destructive font-semibold">
@@ -102,9 +102,9 @@ export default function TestDashboard() {
       )}
 
       {!results && !isRunning && (
-        <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+        <Card className="border border-border rounded-2xl shadow-soft">
           <CardContent className="p-12 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-foreground bg-primary text-primary-foreground text-3xl">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-primary text-primary-foreground text-3xl">
               ✓
             </div>
             <h2 className="font-display text-2xl font-semibold text-foreground mb-2">

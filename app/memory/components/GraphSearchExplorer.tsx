@@ -66,7 +66,7 @@ export function GraphSearchExplorer() {
   }
 
   return (
-    <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+    <Card className="border border-border rounded-2xl shadow-soft">
       <CardHeader>
         <h2 className="flex items-center gap-2 font-display text-xl font-semibold leading-none tracking-tight">
           <Search className="h-5 w-5 text-primary" aria-hidden />
@@ -149,7 +149,7 @@ function SearchResults({ result }: { result: GraphSearchResult }) {
           <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">
             Context block (what the AI would see)
           </h3>
-          <pre className="whitespace-pre-wrap rounded-lg border-2 border-foreground bg-muted/40 p-4 text-sm text-foreground">
+          <pre className="whitespace-pre-wrap rounded-lg border border-border bg-muted/40 p-4 text-sm text-foreground">
             {result.context}
           </pre>
         </div>

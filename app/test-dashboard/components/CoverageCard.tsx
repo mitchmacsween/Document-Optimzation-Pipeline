@@ -17,7 +17,7 @@ function getCoverageBarColor(percentage: string) {
 
 export function CoverageCard({ coverage }: { coverage: Coverage }) {
   return (
-    <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+    <Card className="border border-border rounded-2xl shadow-soft">
       <CardHeader>
         <CardTitle className="font-display">Code Coverage</CardTitle>
       </CardHeader>
@@ -72,7 +72,7 @@ export function CoverageCard({ coverage }: { coverage: Coverage }) {
           ))}
         </div>
 
-        <div className="mt-6 rounded-xl border-2 border-foreground bg-primary/5 p-4">
+        <div className="mt-6 rounded-xl border border-border bg-primary/5 p-4">
           <h3 className="font-display font-semibold text-foreground mb-2">
             What does coverage mean?
           </h3>

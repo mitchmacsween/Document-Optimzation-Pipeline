@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import { deleteSession } from '@/lib/applications/sessions';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { ChatSession } from '@/types/supabase';
@@ -57,6 +58,19 @@ export function ChatSessionSidebar({
     };
   }, []);
 
+  async function handleDelete(session: ChatSession) {
+    if (!window.confirm(`Delete "${session.name}"? This cannot be undone.`)) {
+      return;
+    }
+    await deleteSession(session.session_id);
+    setSessions((prev) =>
+      prev.filter((s) => s.session_id !== session.session_id)
+    );
+    if (session.session_id === activeSessionId) {
+      onNewChat();
+    }
+  }
+
   return (
     <aside className="flex w-64 flex-col gap-2 border-r border-border p-3">
       <Button
@@ -79,20 +93,32 @@ export function ChatSessionSidebar({
           sessions.map((session) => {
             const isActive = session.session_id === activeSessionId;
             return (
-              <button
+              <div
                 key={session.id}
-                type="button"
-                aria-current={isActive}
-                onClick={() => onSelectSession(session.session_id)}
-                className={cn(
-                  'w-full truncate rounded-md px-3 py-2 text-left text-sm',
-                  isActive
-                    ? 'bg-muted font-medium text-foreground'
-                    : 'text-muted-foreground hover:bg-muted/60'
-                )}
+                className="group flex items-center rounded-md"
               >
-                {session.name}
-              </button>
+                <button
+                  type="button"
+                  aria-current={isActive}
+                  onClick={() => onSelectSession(session.session_id)}
+                  className={cn(
+                    'flex-1 truncate rounded-md px-3 py-2 text-left text-sm',
+                    isActive
+                      ? 'bg-muted font-medium text-foreground'
+                      : 'text-muted-foreground hover:bg-muted/60'
+                  )}
+                >
+                  {session.name}
+                </button>
+                <button
+                  type="button"
+                  aria-label={`Delete conversation "${session.name}"`}
+                  onClick={() => void handleDelete(session)}
+                  className="shrink-0 rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:text-destructive focus:opacity-100 group-hover:opacity-100"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
             );
           })
         )}

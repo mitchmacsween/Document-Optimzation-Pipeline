@@ -73,7 +73,7 @@ export function TypeAndShapeSection() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-4 rounded-2xl border-2 border-foreground bg-card p-5 shadow-hard">
+        <div className="space-y-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
           <p className="text-sm font-medium text-muted-foreground">
             Type scale
           </p>
@@ -90,7 +90,7 @@ export function TypeAndShapeSection() {
           ))}
         </div>
 
-        <div className="space-y-4 rounded-2xl border-2 border-foreground bg-card p-5 shadow-hard">
+        <div className="space-y-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
           <p className="text-sm font-medium text-muted-foreground">
             Corner radius
           </p>

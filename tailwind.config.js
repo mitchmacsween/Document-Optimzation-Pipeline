@@ -61,6 +61,10 @@ module.exports = {
           DEFAULT: 'hsl(var(--teal))',
           foreground: 'hsl(var(--teal-foreground))',
         },
+        brand: {
+          DEFAULT: 'hsl(var(--brand))',
+          foreground: 'hsl(var(--brand-foreground))',
+        },
         chart: {
           1: 'hsl(var(--chart-1))',
           2: 'hsl(var(--chart-2))',
@@ -83,6 +87,11 @@ module.exports = {
         'hard-sm': '2px 2px 0 0 hsl(var(--foreground))',
         hard: '4px 4px 0 0 hsl(var(--foreground))',
         'hard-lg': '6px 6px 0 0 hsl(var(--foreground))',
+        // Warm editorial soft shadows — layered for depth without graphic weight.
+        'soft-sm': '0 1px 2px 0 hsl(28 25% 12% / 0.05)',
+        soft: '0 1px 2px 0 hsl(28 25% 12% / 0.04), 0 10px 28px -10px hsl(28 25% 12% / 0.12)',
+        'soft-lg':
+          '0 2px 4px 0 hsl(28 25% 12% / 0.05), 0 24px 48px -16px hsl(28 25% 12% / 0.16)',
       },
       borderRadius: {
         lg: 'var(--radius)',

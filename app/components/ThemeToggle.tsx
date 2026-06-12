@@ -39,7 +39,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label="Toggle dark mode"
       title="Toggle dark mode"
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full border-2 border-foreground bg-card text-foreground transition-transform hover:-translate-y-0.5 hover:shadow-hard-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-transform hover:-translate-y-0.5 hover:shadow-soft-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
     >
       {isDark ? <SunIcon /> : <MoonIcon />}
     </button>

@@ -46,7 +46,7 @@ export function UserSummaryCard() {
   }
 
   return (
-    <Card className="border-2 border-foreground rounded-2xl shadow-hard">
+    <Card className="border border-border rounded-2xl shadow-soft">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-display">
           <Brain className="h-5 w-5 text-primary" aria-hidden />
